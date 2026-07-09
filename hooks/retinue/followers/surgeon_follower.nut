@@ -8,7 +8,20 @@
 
 		this.m.Cost = 3000;		// Vanilla: 3500
 		this.m.Effects.remove(1);	// We remove the entry about injuries taking one day less to heal
+		// TODO make this a hoverable tooltip
+		this.m.Effects.push("All recruits can now learn the Nine Lives perk.");
 	}
+
+	q.onBuildPerkTree = @(__original) { function onBuildPerkTree( _perkTree )
+	{
+		__original(_perkTree);
+		// We remove it and add it so that it goes on the first tier
+		if (_perkTree.hasPerk("perk.nine_lives"))
+		{
+			_perkTree.removePerk("perk.nine_lives");
+		}
+		_perkTree.addPerk("perk.nine_lives");
+	}}.onBuildPerkTree;
 
 	// Overwrite, because we change the condition the requirement text, and make it more moddable
 	q.onEvaluate = @() function()
