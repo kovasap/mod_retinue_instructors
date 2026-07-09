@@ -33,17 +33,13 @@ jobs:
         run: echo "::set-output name=commitmessage::$(git log -1 --pretty=format:"%s")"
         id: commitmessage
         
-      - name: create_release
-        uses: actions/create-release@v1
-        id: create_release
-        with:
-          draft: false
-          prerelease: false
-          release_name: ${{ steps.commitmessage.outputs.commitmessage }}
-          tag_name: ${{ github.run_id }}
-          body_path: README.md
+      - name: Create a Release
+        uses: elgohr/Github-Release-Action@v5
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+        with:
+          title: ${{ steps.commitmessage.outputs.commitmessage }}
+          tag: ${{ github.run_id }}
           
       - name: upload mod artifact
         uses: actions/upload-release-asset@v1
